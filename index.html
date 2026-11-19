@@ -23,13 +23,13 @@
       <button class="nav-btn" data-screen="screen-m2" id="nav-m2">M2: API</button>
       <button class="nav-btn" data-screen="screen-m3" id="nav-m3">M3: Portas I</button>
       <button class="nav-btn" data-screen="screen-m4" id="nav-m4">M4: Portas II</button>
-      <button class="nav-btn" data-screen="screen-m5" id="nav-m5">M5: Cofre (Cruzadinha)</button>
+      <button class="nav-btn" data-screen="screen-m5" id="nav-m5">M5: Jaula (Cruzadinha)</button>
       <button class="nav-btn" data-screen="screen-ranking" id="nav-ranking">Ranking</button>
     </nav>
 
     <div class="hud-timer-box">
-      <span class="timer-label">TEMPO DA FASE:</span>
-      <span id="hudTimer" class="timer-value">--:--</span>
+      <span class="timer-label">TEMPO:</span>
+      <span id="hudTimer" class="timer-value">LIVRE</span>
     </div>
   </header>
 
@@ -49,8 +49,8 @@
             <span class="portrait-label">Prof. Matheus</span>
           </div>
           <div class="dialogue-bubble">
-            <p><strong>"SOCORRO, AGENTE!"</strong></p>
-            <p>A vilã <strong>Laritrix Vilanesca</strong> invadiu o laboratório e sequestrou a minha coelhinha <strong>Alice</strong>! Ela exige nota <strong>9,7 em Socioemocional</strong> e <strong>10 em Arquitetura Computacional</strong> — algo impossível — senão a Alice vira ensopado!</p>
+            <p class="dialogue-title">"SOCORRO, AGENTE!"</p>
+            <p>A <strong>Laritrix Vilanesca</strong> invadiu o laboratório e sequestrou a minha coelhinha <strong>Alice</strong>! Ela exige <strong>nota 9 em Socioemocional</strong>, <strong>10 em Arquitetura Computacional</strong> e <strong>um encontro com Gustavo Mioto</strong> — algo impossível — senão a Alice vira ensopado!</p>
           </div>
           <div class="portrait-box">
             <img src="assets/laritrix.png" alt="Laritrix Vilanesca" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
@@ -82,7 +82,7 @@
             <button id="btnDecodeAscii" class="pixel-btn primary">Decodificar Mensagem</button>
             <button id="btnToggleAsciiHint" class="pixel-btn secondary" type="button">Atalho ASCII</button>
           </div>
-          <p id="asciiHintBox" class="ascii-cheat hidden">Dica de Campo: O primeiro caractere imprimível (Espaço) vale 32 em decimal. As letras maiúsculas começam no código 65.</p>
+          <p id="asciiHintBox" class="ascii-cheat hidden">Dica de Campo: O caractere Espaço vale 32 em decimal. As letras maiúsculas começam no código 65 ("A").</p>
           <p id="asciiFeedback" class="feedback-msg"></p>
         </div>
 
@@ -104,8 +104,17 @@
       <div class="pixel-card">
         <div class="card-header-strip">
           <span>MISSÃO 01 // SPRINT 1: CONVERSÃO DE BASES</span>
-          <span>CADEADO DO RÁDIO</span>
+          <span id="m1StatusTag" class="status-pill danger">STATUS: RÁDIO BLOQUEADO</span>
         </div>
+
+        <div class="scene-stage">
+          <img id="m1SceneImg" src="assets/m1-antes.png" alt="Cena Missão 1" onerror="this.style.display='none'; document.getElementById('m1SceneArt').style.display='flex';">
+          <div id="m1SceneArt" class="scene-art-fallback state-locked">
+            <span class="art-icon">📻 🔒</span>
+            <span id="m1SceneCaption">FREQUÊNCIA CODIFICADA — SINAL BLOQUEADO</span>
+          </div>
+        </div>
+
         <p class="mission-story">Interceptamos a frequência do esconderijo no Brooklyn. Converta os <strong>3 números decimais</strong> abaixo para abrir o cadeado do rádio de Laritrix:</p>
 
         <div class="puzzle-grid-3">
@@ -139,8 +148,17 @@
       <div class="pixel-card">
         <div class="card-header-strip">
           <span>MISSÃO 02 // SPRINT 2: API DAT-ACQU-INO</span>
-          <span>TERMINAL DE SENSORES</span>
+          <span id="m2StatusTag" class="status-pill danger">STATUS: FIREWALL ATIVO</span>
         </div>
+
+        <div class="scene-stage">
+          <img id="m2SceneImg" src="assets/m2-antes.png" alt="Cena Missão 2" onerror="this.style.display='none'; document.getElementById('m2SceneArt').style.display='flex';">
+          <div id="m2SceneArt" class="scene-art-fallback state-locked">
+            <span class="art-icon">🖥️ 🛡️</span>
+            <span id="m2SceneCaption">SERVIDOR DAT-ACQU-INO — ACESSO NEGADO (PORTA 3300)</span>
+          </div>
+        </div>
+
         <p class="mission-story">O laboratório de Laritrix monitora a jaula da Alice usando a API <code>dat-acqu-ino</code> (porta 3300). Responda aos 3 protocolos de arquitetura para invadir o servidor:</p>
 
         <div class="api-questions">
@@ -188,8 +206,17 @@
       <div class="pixel-card">
         <div class="card-header-strip">
           <span>MISSÃO 03 // SPRINT 3: PORTAS LÓGICAS BÁSICAS</span>
-          <span>GRADE DE LASERS</span>
+          <span id="m3StatusTag" class="status-pill danger">STATUS: LASERS ATIVADOS</span>
         </div>
+
+        <div class="scene-stage">
+          <img id="m3SceneImg" src="assets/m3-antes.png" alt="Lasers Ativados" onerror="this.style.display='none'; document.getElementById('m3SceneArt').style.display='flex';">
+          <div id="m3SceneArt" class="scene-art-fallback state-locked">
+            <span class="art-icon">🚨 ⚡ 🔦</span>
+            <span id="m3SceneCaption">CORREDOR BLOQUEADO — FEIXES DE LASER ATIVADOS</span>
+          </div>
+        </div>
+
         <p class="mission-story">Configure as chaves binárias (<strong>0</strong> ou <strong>1</strong>) para que a saída final de cada porta lógica desligue os lasers:</p>
 
         <div class="puzzle-grid-3">
@@ -240,8 +267,17 @@
       <div class="pixel-card">
         <div class="card-header-strip">
           <span>MISSÃO 04 // SPRINT 3: PORTAS DERIVADAS</span>
-          <span>ALARME SILENCIOSO</span>
+          <span id="m4StatusTag" class="status-pill danger">STATUS: ALARME ARMADO</span>
         </div>
+
+        <div class="scene-stage">
+          <img id="m4SceneImg" src="assets/m4-antes.png" alt="Alarme Armado" onerror="this.style.display='none'; document.getElementById('m4SceneArt').style.display='flex';">
+          <div id="m4SceneArt" class="scene-art-fallback state-locked">
+            <span class="art-icon">🔔 ⚠️ 🔐</span>
+            <span id="m4SceneCaption">SENSOR SÍSMICO DO COFRE — ALARME ARMADO</span>
+          </div>
+        </div>
+
         <p class="mission-story">Analise as entradas fornecidas e calcule a saída binária (<strong>0</strong> ou <strong>1</strong>) de cada porta derivada para neutralizar o alarme:</p>
 
         <div class="puzzle-grid-3">
@@ -281,7 +317,7 @@
 
         <div class="btn-row">
           <button id="btnCheckM4" class="pixel-btn primary">Cortar Alarme do Cofre</button>
-          <button id="btnNextM4" class="pixel-btn success hidden" data-next="screen-m5">Ir para o Cofre Final (Cruzadinha) &gt;&gt;</button>
+          <button id="btnNextM4" class="pixel-btn success hidden" data-next="screen-m5">Ir para a Jaula da Alice (Cruzadinha) &gt;&gt;</button>
         </div>
         <p id="m4Feedback" class="feedback-msg"></p>
       </div>
@@ -291,16 +327,22 @@
     <section id="screen-m5" class="screen">
       <div class="pixel-card crossword-card">
         <div class="card-header-strip">
-          <span>MISSÃO 05 // COFRE FINAL: CRUZADINHA DE ARQUITETURA COMPUTACIONAL</span>
+          <span>MISSÃO 05 // JAULA DA ALICE: CRUZADINHA DE ARQUITETURA COMPUTACIONAL</span>
           <span id="crosswordScore" class="score-badge">0 de 12 palavras</span>
         </div>
 
-        <div class="cage-banner">
-          <div class="portrait-box mini">
-            <img src="assets/alice.png" alt="Coelhinha Alice" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-            <div class="pixel-fallback fallback-alice">ALICE</div>
+        <div class="cage-scene-box">
+          <div class="cage-visual">
+            <img id="m5CageImg" src="assets/alice-jaula.png" alt="Alice na Jaula" onerror="this.style.display='none'; document.getElementById('m5CageArt').style.display='flex';">
+            <div id="m5CageArt" class="cage-art-fallback locked-cage">
+              <span class="cage-emoji">🐰🔒</span>
+              <span id="m5CageLabel">ALICE PRESA NA JAULA</span>
+            </div>
           </div>
-          <p>Complete as <strong>12 palavras</strong> cruzadas (sem acentos e sem espaços) e clique em <strong>Conferir</strong> para destrancar a jaula da Alice!</p>
+          <div class="cage-instructions">
+            <p><strong>ÚLTIMA ETAPA DO RESGATE!</strong></p>
+            <p>Preencha as <strong>12 palavras</strong> cruzadas (letras maiúsculas, sem acentos e sem espaços) e clique em <strong>Conferir</strong> para destrancar a jaula da coelhinha Alice antes que o tempo acabe!</p>
+          </div>
         </div>
 
         <div class="crossword-layout">
@@ -355,11 +397,11 @@
     <div class="pixel-card modal-box">
       <h2 id="modalTitle">MISSÃO CUMPRIDA!</h2>
       <div class="modal-portraits" id="modalPortraitArea">
-        <img src="assets/alice.png" alt="Alice Salva" onerror="this.style.display='none';">
+        <img src="assets/alice-livre.png" alt="Alice Livre" onerror="this.style.display='none';">
       </div>
       <p id="modalMessage"></p>
-      <div class="btn-row">
-        <button id="btnModalAction" class="pixel-btn primary">Continuar</button>
+      <div class="btn-row center-row">
+        <button id="btnModalAction" class="pixel-btn success">Continuar</button>
       </div>
     </div>
   </div>
