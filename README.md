@@ -1,4 +1,4 @@
-# Operação Resgate Alice — Cruzadinha de Arquitetura Computacional
+# Operação Resgate Lola — Cruzadinha de Arquitetura Computacional
 
 Jogo estático em estilo 2D Pixel Art inspirado em *Três Espiãs Demais* e *Spy x Family*, desenvolvido para revisão dos conteúdos de Arquitetura Computacional (Sprints 1, 2 e 3).
 
@@ -8,7 +8,7 @@ Jogo estático em estilo 2D Pixel Art inspirado em *Três Espiãs Demais* e *Spy
 ## Como Jogar
 1. **Briefing ASCII:** Informe seu codinome de agente e decodifique a carta de resgate de Laritrix Vilanesca inserindo os códigos decimais da Tabela ASCII para o **Espaço (`32`)** e para a letra **`A` maiúscula (`65`)**.
 2. **Missões 1 a 4 (Cadeados):** Resolva os desafios progressivos de conversão de bases (Sprint 1), fluxo da API `dat-acqu-ino` (Sprint 2) e portas lógicas básicas e derivadas (Sprint 3) antes que o cronômetro da fase zere. Você também pode navegar livremente entre as fases pelo menu superior.
-3. **Missão 5 — Cofre Final (Cruzadinha):** Preencha o tabuleiro com as **12 palavras** (letras maiúsculas, sem acentos e sem espaços), clique em **Conferir** para validar seus acertos e salve a coelhinha Alice do Prof. Matheus!
+3. **Missão 5 — Cofre Final (Cruzadinha):** Preencha o tabuleiro com as **12 palavras** (letras maiúsculas, sem acentos e sem espaços), clique em **Conferir** para validar seus acertos e salve a coelhinha Lola do Prof. Matheus!
 
 ## Palavras e Pistas da Cruzadinha
 

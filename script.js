@@ -1,7 +1,7 @@
 // =========================================================
 // ESTADO & PERSISTÊNCIA (LOCALSTORAGE)
 // =========================================================
-const STORAGE_KEY = "sptech_escape_alice_v2";
+const STORAGE_KEY = "sptech_escape_lola_v2";
 
 const defaultState = {
   nickname: "",
@@ -9,9 +9,9 @@ const defaultState = {
   completed: { m1: false, m2: false, m3: false, m4: false, m5: false },
   elapsedSeconds: 0,
   ranking: [
-    { name: "Agente Twilight", time: "04:18", status: "Alice Resgatada" },
-    { name: "Agente Clover", time: "05:42", status: "Alice Resgatada" },
-    { name: "Agente Sam", time: "06:15", status: "Alice Resgatada" }
+    { name: "Agente Twilight", time: "04:18", status: "Lola Resgatada" },
+    { name: "Agente Clover", time: "05:42", status: "Lola Resgatada" },
+    { name: "Agente Sam", time: "06:15", status: "Lola Resgatada" }
   ]
 };
 
@@ -105,14 +105,14 @@ function syncSceneVisuals() {
     const cageLabel = document.getElementById("m5CageLabel");
 
     if (cageBox) cageBox.classList.add("rescued");
-    if (cageImg) cageImg.src = "assets/alice-livre.png";
+    if (cageImg) cageImg.src = "assets/lola-livre.png";
     if (cageArt) {
       cageArt.classList.remove("locked-cage");
       cageArt.classList.add("unlocked-cage");
       const emoji = cageArt.querySelector(".cage-emoji");
       if (emoji) emoji.textContent = "🐰🎉";
     }
-    if (cageLabel) cageLabel.textContent = "ALICE SALVA E LIVRE DA JAULA!";
+    if (cageLabel) cageLabel.textContent = "LOLA SALVA E LIVRE DA JAULA!";
   }
 }
 
@@ -178,7 +178,7 @@ function startPhaseTimer(screenId) {
       clearInterval(timerInterval);
       showModal(
         "TEMPO ESGOTADO!",
-        "O alarme disparou e a Laritrix fugiu com a Alice! Clique abaixo para reiniciar o cronômetro desta fase e tentar de novo.",
+        "O alarme disparou e a Laritrix fugiu com a Lola! Clique abaixo para reiniciar o cronômetro desta fase e tentar de novo.",
         () => startPhaseTimer(currentScreen)
       );
     }
@@ -231,7 +231,7 @@ function setupBriefing() {
 }
 
 function revealLetter(element, nick) {
-  element.textContent = `OLA AGENTE ${nick.toUpperCase()}... SE QUISER VER ALICE VIVA, QUEBRE MEUS 4 CADEADOS DE SISTEMAS E RESOLVA O COFRE FINAL DE ARQUITETURA COMPUTACIONAL! ASS: LARITRIX.`;
+  element.textContent = `OLA AGENTE ${nick.toUpperCase()}... SE QUISER VER LOLA VIVA, QUEBRE MEUS 4 CADEADOS DE SISTEMAS E RESOLVA O COFRE FINAL DE ARQUITETURA COMPUTACIONAL! ASS: LARITRIX.`;
 }
 
 // =========================================================
@@ -302,7 +302,7 @@ function setupMissions() {
       gameState.completed.m4 = true;
       saveState();
       fb.classList.add("ok");
-      fb.textContent = "Alarme silencioso neutralizado! Você chegou à jaula da Alice.";
+      fb.textContent = "Alarme silencioso neutralizado! Você chegou à jaula da Lola.";
       document.getElementById("btnNextM4").classList.remove("hidden");
     } else {
       fb.classList.remove("ok");
@@ -459,14 +459,14 @@ function checkCrossword() {
     gameState.ranking.push({
       name: agentLabel,
       time: finalTimeStr,
-      status: "Alice Resgatada"
+      status: "Lola Resgatada"
     });
     saveState();
 
     fb.classList.add("ok");
-    fb.textContent = "12 de 12 palavras corretas! A jaula da coelhinha Alice foi destrancada!";
+    fb.textContent = "12 de 12 palavras corretas! A jaula da coelhinha Lola foi destrancada!";
     showModal(
-      "ALICE FOI SALVA!",
+      "LOLA FOI SALVA!",
       `Parabéns, ${agentLabel}! Você derrotou Laritrix Vilanesca, salvou a coelhinha do Prof. Matheus e registrou o tempo ${finalTimeStr} no Hall dos Agentes!`,
       () => switchScreen("screen-ranking")
     );
