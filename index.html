@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Operação Resgate Alice | Cruzadinha Arq. Comp.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- BARRA SUPERIOR / HUB DE NAVEGAÇÃO -->
+  <header class="hud-bar">
+    <div class="hud-brand">
+      <span class="badge-agency">SPTech OPS // BROOKLYN 1987</span>
+      <span id="hudAgentName" class="agent-tag">Agente: Não Identificado</span>
+    </div>
+
+    <nav class="hud-nav" aria-label="Mapa de Missões">
+      <button class="nav-btn active" data-screen="screen-briefing" id="nav-briefing">0. Briefing</button>
+      <button class="nav-btn" data-screen="screen-m1" id="nav-m1">M1: Bases</button>
+      <button class="nav-btn" data-screen="screen-m2" id="nav-m2">M2: API</button>
+      <button class="nav-btn" data-screen="screen-m3" id="nav-m3">M3: Portas I</button>
+      <button class="nav-btn" data-screen="screen-m4" id="nav-m4">M4: Portas II</button>
+      <button class="nav-btn" data-screen="screen-m5" id="nav-m5">M5: Cofre (Cruzadinha)</button>
+      <button class="nav-btn" data-screen="screen-ranking" id="nav-ranking">Ranking</button>
+    </nav>
+
+    <div class="hud-timer-box">
+      <span class="timer-label">TEMPO DA FASE:</span>
+      <span id="hudTimer" class="timer-value">--:--</span>
+    </div>
+  </header>
+
+  <main class="game-viewport">
+    <!-- TELA 0: BRIEFING & DECODIFICADOR ASCII -->
+    <section id="screen-briefing" class="screen active">
+      <div class="pixel-card dossier-card">
+        <div class="card-header-strip">
+          <span>TRANSMISSÃO URGENTE // CANAL CRIPTOGRAFADO</span>
+          <span>ARQUIVO #1987-ALICE</span>
+        </div>
+
+        <div class="cast-row">
+          <div class="portrait-box">
+            <img src="assets/prof-matheus.png" alt="Prof. Matheus" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="pixel-fallback fallback-matheus">PROF.<br>MATHEUS</div>
+            <span class="portrait-label">Prof. Matheus</span>
+          </div>
+          <div class="dialogue-bubble">
+            <p><strong>"SOCORRO, AGENTE!"</strong></p>
+            <p>A vilã <strong>Laritrix Vilanesca</strong> invadiu o laboratório e sequestrou a minha coelhinha <strong>Alice</strong>! Ela exige nota <strong>9,7 em Socioemocional</strong> e <strong>10 em Arquitetura Computacional</strong> — algo impossível — senão a Alice vira ensopado!</p>
+          </div>
+          <div class="portrait-box">
+            <img src="assets/laritrix.png" alt="Laritrix Vilanesca" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="pixel-fallback fallback-laritrix">LARITRIX<br>VILANESCA</div>
+            <span class="portrait-label">Laritrix</span>
+          </div>
+        </div>
+
+        <div class="ascii-gate-box">
+          <h3>PASSO 1: IDENTIFICAÇÃO & CALIBRAÇÃO ASCII</h3>
+          <p class="hint-text">A carta de resgate está corrompida! Informe seu codinome e os <strong>2 códigos decimais da Tabela ASCII</strong> para o caractere <strong>Espaço (" ")</strong> e para a letra <strong>"A" maiúscula</strong> para decifrar o texto.</p>
+
+          <div class="form-row">
+            <div class="input-group">
+              <label for="agentNicknameInput">Codinome do Agente:</label>
+              <input type="text" id="agentNicknameInput" placeholder="Ex: Twilight / Clover" maxlength="18" />
+            </div>
+            <div class="input-group small-input">
+              <label for="asciiSpaceInput">ASCII Espaço (" "):</label>
+              <input type="number" id="asciiSpaceInput" placeholder="??" />
+            </div>
+            <div class="input-group small-input">
+              <label for="asciiAInput">ASCII Letra "A":</label>
+              <input type="number" id="asciiAInput" placeholder="??" />
+            </div>
+          </div>
+
+          <div class="btn-row">
+            <button id="btnDecodeAscii" class="pixel-btn primary">Decodificar Mensagem</button>
+            <button id="btnToggleAsciiHint" class="pixel-btn secondary" type="button">Atalho ASCII</button>
+          </div>
+          <p id="asciiHintBox" class="ascii-cheat hidden">Dica de Campo: O primeiro caractere imprimível (Espaço) vale 32 em decimal. As letras maiúsculas começam no código 65.</p>
+          <p id="asciiFeedback" class="feedback-msg"></p>
+        </div>
+
+        <div class="letter-terminal">
+          <div class="terminal-bar">CARTA INTERCEPTADA DE LARITRIX:</div>
+          <p id="encryptedLetterText" class="terminal-text">
+            [65]L[65][32]AGENTE...[32]SE[32]QUISER[32]VER[32][65]LICE[32]VIVA,[32]QUEBRE[32]MEUS[32]4[32]C[65]DE[65]DOS[32]DE[32]SISTEM[65]S[32]E[32]RESOLV[65][32]O[32]COFRE[32]FINAL[32]DE[32][65]RQUITETUR[65][32]COMPUT[65]CION[65]L![32]ASS:[32]L[65]RITRIX.
+          </p>
+        </div>
+
+        <div class="action-footer">
+          <button id="btnStartMission1" class="pixel-btn success hidden">Iniciar Operação (Missão 1) &gt;&gt;</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- MISSÃO 1: SPRINT 1 - CONVERSÃO DE BASES -->
+    <section id="screen-m1" class="screen">
+      <div class="pixel-card">
+        <div class="card-header-strip">
+          <span>MISSÃO 01 // SPRINT 1: CONVERSÃO DE BASES</span>
+          <span>CADEADO DO RÁDIO</span>
+        </div>
+        <p class="mission-story">Interceptamos a frequência do esconderijo no Brooklyn. Converta os <strong>3 números decimais</strong> abaixo para abrir o cadeado do rádio de Laritrix:</p>
+
+        <div class="puzzle-grid-3">
+          <div class="lock-dial">
+            <span class="dial-tag">DÍGITO 1 (BASE 2 - BINÁRIO)</span>
+            <p class="dial-question">Decimal <strong>13</strong> em Binário:</p>
+            <input type="text" id="m1Bin" placeholder="Ex: 1010" maxlength="8" />
+          </div>
+          <div class="lock-dial">
+            <span class="dial-tag">DÍGITO 2 (BASE 8 - OCTAL)</span>
+            <p class="dial-question">Decimal <strong>25</strong> em Octal:</p>
+            <input type="text" id="m1Oct" placeholder="Ex: 17" maxlength="6" />
+          </div>
+          <div class="lock-dial">
+            <span class="dial-tag">DÍGITO 3 (BASE 16 - HEXA)</span>
+            <p class="dial-question">Decimal <strong>42</strong> em Hexadecimal:</p>
+            <input type="text" id="m1Hex" placeholder="Ex: 1F" maxlength="6" />
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button id="btnCheckM1" class="pixel-btn primary">Destravar Cadeado 01</button>
+          <button id="btnNextM1" class="pixel-btn success hidden" data-next="screen-m2">Avançar para Missão 2 &gt;&gt;</button>
+        </div>
+        <p id="m1Feedback" class="feedback-msg"></p>
+      </div>
+    </section>
+
+    <!-- MISSÃO 2: SPRINT 2 - API DAT-ACQU-INO -->
+    <section id="screen-m2" class="screen">
+      <div class="pixel-card">
+        <div class="card-header-strip">
+          <span>MISSÃO 02 // SPRINT 2: API DAT-ACQU-INO</span>
+          <span>TERMINAL DE SENSORES</span>
+        </div>
+        <p class="mission-story">O laboratório de Laritrix monitora a jaula da Alice usando a API <code>dat-acqu-ino</code> (porta 3300). Responda aos 3 protocolos de arquitetura para invadir o servidor:</p>
+
+        <div class="api-questions">
+          <div class="question-block">
+            <label for="m2Q1">1. Qual é a sequência correta do fluxo de dados da aplicação?</label>
+            <select id="m2Q1">
+              <option value="">-- Selecione o fluxo --</option>
+              <option value="wrong1">Banco de Dados -&gt; Arduino -&gt; API -&gt; Usuário</option>
+              <option value="ok">Arduino -&gt; API -&gt; Front-End -&gt; Usuário</option>
+              <option value="wrong2">Front-End -&gt; Serial -&gt; Arduino -&gt; Express</option>
+            </select>
+          </div>
+
+          <div class="question-block">
+            <label for="m2Q2">2. No front-end (index.html), qual função nativa do JS faz a requisição HTTP para buscar os dados da API?</label>
+            <select id="m2Q2">
+              <option value="">-- Selecione a função --</option>
+              <option value="ok">fetch()</option>
+              <option value="wrong1">serialport()</option>
+              <option value="wrong2">createPool()</option>
+            </select>
+          </div>
+
+          <div class="question-block">
+            <label for="m2Q3">3. Com <code>HABILITAR_OPERACAO_INSERIR = false</code> no main.js, onde os valores ficam guardados?</label>
+            <select id="m2Q3">
+              <option value="">-- Selecione o local --</option>
+              <option value="wrong1">Na tabela medida do MySQL</option>
+              <option value="ok">Apenas em memória RAM (array da API)</option>
+              <option value="wrong2">Gravados na memória ROM do Arduino</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button id="btnCheckM2" class="pixel-btn primary">Hackear Terminal API</button>
+          <button id="btnNextM2" class="pixel-btn success hidden" data-next="screen-m3">Avançar para Missão 3 &gt;&gt;</button>
+        </div>
+        <p id="m2Feedback" class="feedback-msg"></p>
+      </div>
+    </section>
+
+    <!-- MISSÃO 3: SPRINT 3 - PORTAS LÓGICAS BÁSICAS -->
+    <section id="screen-m3" class="screen">
+      <div class="pixel-card">
+        <div class="card-header-strip">
+          <span>MISSÃO 03 // SPRINT 3: PORTAS LÓGICAS BÁSICAS</span>
+          <span>GRADE DE LASERS</span>
+        </div>
+        <p class="mission-story">Configure as chaves binárias (<strong>0</strong> ou <strong>1</strong>) para que a saída final de cada porta lógica desligue os lasers:</p>
+
+        <div class="puzzle-grid-3">
+          <div class="gate-card">
+            <span class="dial-tag">PORTA AND (E)</span>
+            <div class="gate-diagram">A [?] ──┐<br>B [1] ──┤ AND ──► Saída = <strong>1</strong></div>
+            <label for="m3And">Valor de A para Saída = 1:</label>
+            <select id="m3And">
+              <option value="">?</option>
+              <option value="0">0</option>
+              <option value="1">1</option>
+            </select>
+          </div>
+
+          <div class="gate-card">
+            <span class="dial-tag">PORTA OR (OU)</span>
+            <div class="gate-diagram">A [0] ──┐<br>B [?] ──┤ OR ───► Saída = <strong>0</strong></div>
+            <label for="m3Or">Valor de B para Saída = 0:</label>
+            <select id="m3Or">
+              <option value="">?</option>
+              <option value="0">0</option>
+              <option value="1">1</option>
+            </select>
+          </div>
+
+          <div class="gate-card">
+            <span class="dial-tag">PORTA NOT (INVERSORA)</span>
+            <div class="gate-diagram">A [?] ──► NOT ──► Saída = <strong>1</strong></div>
+            <label for="m3Not">Valor de A para Saída = 1:</label>
+            <select id="m3Not">
+              <option value="">?</option>
+              <option value="0">0</option>
+              <option value="1">1</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button id="btnCheckM3" class="pixel-btn primary">Desativar Lasers</button>
+          <button id="btnNextM3" class="pixel-btn success hidden" data-next="screen-m4">Avançar para Missão 4 &gt;&gt;</button>
+        </div>
+        <p id="m3Feedback" class="feedback-msg"></p>
+      </div>
+    </section>
+
+    <!-- MISSÃO 4: SPRINT 3 - PORTAS LÓGICAS DERIVADAS -->
+    <section id="screen-m4" class="screen">
+      <div class="pixel-card">
+        <div class="card-header-strip">
+          <span>MISSÃO 04 // SPRINT 3: PORTAS DERIVADAS</span>
+          <span>ALARME SILENCIOSO</span>
+        </div>
+        <p class="mission-story">Analise as entradas fornecidas e calcule a saída binária (<strong>0</strong> ou <strong>1</strong>) de cada porta derivada para neutralizar o alarme:</p>
+
+        <div class="puzzle-grid-3">
+          <div class="gate-card">
+            <span class="dial-tag">PORTA NAND</span>
+            <div class="gate-diagram">A = 1, B = 1 ──► NAND ──► S = ?</div>
+            <label for="m4Nand">Saída S:</label>
+            <select id="m4Nand">
+              <option value="">?</option>
+              <option value="0">0</option>
+              <option value="1">1</option>
+            </select>
+          </div>
+
+          <div class="gate-card">
+            <span class="dial-tag">PORTA NOR</span>
+            <div class="gate-diagram">A = 0, B = 0 ──► NOR ───► S = ?</div>
+            <label for="m4Nor">Saída S:</label>
+            <select id="m4Nor">
+              <option value="">?</option>
+              <option value="0">0</option>
+              <option value="1">1</option>
+            </select>
+          </div>
+
+          <div class="gate-card">
+            <span class="dial-tag">PORTA XOR (OU EXCLUSIVO)</span>
+            <div class="gate-diagram">A = 1, B = 1 ──► XOR ───► S = ?</div>
+            <label for="m4Xor">Saída S:</label>
+            <select id="m4Xor">
+              <option value="">?</option>
+              <option value="0">0</option>
+              <option value="1">1</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button id="btnCheckM4" class="pixel-btn primary">Cortar Alarme do Cofre</button>
+          <button id="btnNextM4" class="pixel-btn success hidden" data-next="screen-m5">Ir para o Cofre Final (Cruzadinha) &gt;&gt;</button>
+        </div>
+        <p id="m4Feedback" class="feedback-msg"></p>
+      </div>
+    </section>
+
+    <!-- MISSÃO 5: COFRE FINAL - CRUZADINHA OFICIAL (12 PALAVRAS) -->
+    <section id="screen-m5" class="screen">
+      <div class="pixel-card crossword-card">
+        <div class="card-header-strip">
+          <span>MISSÃO 05 // COFRE FINAL: CRUZADINHA DE ARQUITETURA COMPUTACIONAL</span>
+          <span id="crosswordScore" class="score-badge">0 de 12 palavras</span>
+        </div>
+
+        <div class="cage-banner">
+          <div class="portrait-box mini">
+            <img src="assets/alice.png" alt="Coelhinha Alice" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="pixel-fallback fallback-alice">ALICE</div>
+          </div>
+          <p>Complete as <strong>12 palavras</strong> cruzadas (sem acentos e sem espaços) e clique em <strong>Conferir</strong> para destrancar a jaula da Alice!</p>
+        </div>
+
+        <div class="crossword-layout">
+          <div class="grid-wrapper">
+            <div id="crosswordGrid" class="crossword-grid" role="grid" aria-label="Tabuleiro da Cruzadinha"></div>
+            <div class="btn-row crossword-controls">
+              <button id="btnCheckCrossword" class="pixel-btn primary">Conferir</button>
+              <button id="btnResetCrossword" class="pixel-btn danger">Reiniciar</button>
+            </div>
+            <p id="crosswordFeedback" class="feedback-msg"></p>
+          </div>
+
+          <div class="clues-panel">
+            <div class="clues-group">
+              <h3>HORIZONTAIS</h3>
+              <ul id="cluesHorizontal" class="clues-list"></ul>
+            </div>
+            <div class="clues-group">
+              <h3>VERTICAIS</h3>
+              <ul id="cluesVertical" class="clues-list"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TELA RANKING -->
+    <section id="screen-ranking" class="screen">
+      <div class="pixel-card">
+        <div class="card-header-strip">
+          <span>HALL DOS AGENTES // AGÊNCIA SECRETA SPTECH</span>
+          <span>RECORDS LOCAIS</span>
+        </div>
+        <p class="mission-story">Melhores tempos registrados neste terminal após o resgate completo da coelhinha Alice:</p>
+        <table class="pixel-table">
+          <thead>
+            <tr>
+              <th>POS</th>
+              <th>AGENTE</th>
+              <th>TEMPO TOTAL</th>
+              <th>STATUS</th>
+            </tr>
+          </thead>
+          <tbody id="rankingTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- MODAL DE VITÓRIA / GAME OVER -->
+  <div id="endModal" class="modal-backdrop hidden">
+    <div class="pixel-card modal-box">
+      <h2 id="modalTitle">MISSÃO CUMPRIDA!</h2>
+      <div class="modal-portraits" id="modalPortraitArea">
+        <img src="assets/alice.png" alt="Alice Salva" onerror="this.style.display='none';">
+      </div>
+      <p id="modalMessage"></p>
+      <div class="btn-row">
+        <button id="btnModalAction" class="pixel-btn primary">Continuar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
