@@ -1,7 +1,7 @@
 // =========================================================
 // ESTADO & PERSISTÊNCIA (LOCALSTORAGE)
 // =========================================================
-const STORAGE_KEY = "sptech_escape_alice_v1";
+const STORAGE_KEY = "sptech_escape_alice_v2";
 
 const defaultState = {
   nickname: "",
@@ -22,11 +22,11 @@ let phaseSecondsLeft = 0;
 
 const PHASE_TIMERS = {
   "screen-briefing": 0,
-  "screen-m1": 180, // 3 min
-  "screen-m2": 180, // 3 min
-  "screen-m3": 180, // 3 min
-  "screen-m4": 180, // 3 min
-  "screen-m5": 480, // 8 min para a Cruzadinha
+  "screen-m1": 180,
+  "screen-m2": 180,
+  "screen-m3": 180,
+  "screen-m4": 180,
+  "screen-m5": 480,
   "screen-ranking": 0
 };
 
@@ -48,12 +48,72 @@ function loadState() {
 function saveState() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(gameState));
   updateHud();
+  syncSceneVisuals();
 }
 
 function formatTime(totalSec) {
   const m = String(Math.floor(totalSec / 60)).padStart(2, "0");
   const s = String(totalSec % 60).padStart(2, "0");
   return `${m}:${s}`;
+}
+
+// =========================================================
+// ATUALIZAÇÃO VISUAL DAS CENAS (ANTES E DEPOIS)
+// =========================================================
+function setMissionSceneSolved(missionKey, imgSrcAfter, solvedStatusText, solvedCaption, iconAfter) {
+  const statusEl = document.getElementById(`${missionKey}StatusTag`);
+  const imgEl = document.getElementById(`${missionKey}SceneImg`);
+  const artEl = document.getElementById(`${missionKey}SceneArt`);
+  const capEl = document.getElementById(`${missionKey}SceneCaption`);
+
+  if (statusEl) {
+    statusEl.textContent = solvedStatusText;
+    statusEl.classList.remove("danger");
+    statusEl.classList.add("solved");
+  }
+  if (imgEl) {
+    imgEl.src = imgSrcAfter;
+  }
+  if (artEl) {
+    artEl.classList.remove("state-locked");
+    artEl.classList.add("state-unlocked");
+    const iconSpan = artEl.querySelector(".art-icon");
+    if (iconSpan) iconSpan.textContent = iconAfter;
+  }
+  if (capEl) {
+    capEl.textContent = solvedCaption;
+  }
+}
+
+function syncSceneVisuals() {
+  if (gameState.completed.m1) {
+    setMissionSceneSolved("m1", "assets/m1-depois.png", "STATUS: RÁDIO DESBLOQUEADO", "FREQUÊNCIA INTERCEPTADA — SINAL LIBERADO!", "📻 ✅");
+  }
+  if (gameState.completed.m2) {
+    setMissionSceneSolved("m2", "assets/m2-depois.png", "STATUS: SERVIDOR HACKEADO", "CONEXÃO ESTABELECIDA COM DAT-ACQU-INO!", "🖥️ 🔓");
+  }
+  if (gameState.completed.m3) {
+    setMissionSceneSolved("m3", "assets/m3-depois.png", "STATUS: LASERS APAGADOS", "CORREDOR SEGURO — LASERS DESLIGADOS!", "✨ 🟢");
+  }
+  if (gameState.completed.m4) {
+    setMissionSceneSolved("m4", "assets/m4-depois.png", "STATUS: ALARME CORTADO", "ALARME NEUTRALIZADO — COFRE ACESSÍVEL!", "🔕 ✅");
+  }
+  if (gameState.completed.m5) {
+    const cageBox = document.querySelector(".cage-scene-box");
+    const cageImg = document.getElementById("m5CageImg");
+    const cageArt = document.getElementById("m5CageArt");
+    const cageLabel = document.getElementById("m5CageLabel");
+
+    if (cageBox) cageBox.classList.add("rescued");
+    if (cageImg) cageImg.src = "assets/alice-livre.png";
+    if (cageArt) {
+      cageArt.classList.remove("locked-cage");
+      cageArt.classList.add("unlocked-cage");
+      const emoji = cageArt.querySelector(".cage-emoji");
+      if (emoji) emoji.textContent = "🐰🎉";
+    }
+    if (cageLabel) cageLabel.textContent = "ALICE SALVA E LIVRE DA JAULA!";
+  }
 }
 
 // =========================================================
@@ -157,10 +217,12 @@ function setupBriefing() {
       gameState.nickname = nick;
       gameState.asciiUnlocked = true;
       saveState();
+      feedback.classList.add("ok");
       feedback.textContent = `Calibração concluída! Bem-vindo(a), Agente ${nick}.`;
       revealLetter(letterEl, nick);
       startBtn.classList.remove("hidden");
     } else {
+      feedback.classList.remove("ok");
       feedback.textContent = "Códigos incorretos! Lembre-se: Espaço = 32 e 'A' maiúsculo = 65.";
     }
   });
@@ -176,7 +238,6 @@ function revealLetter(element, nick) {
 // MISSÕES 1 A 4 (CADEADOS PROGRESSIVOS)
 // =========================================================
 function setupMissions() {
-  // Missão 1: 13 -> 1101 | 25 -> 31 | 42 -> 2A
   document.getElementById("btnCheckM1").addEventListener("click", () => {
     const bin = document.getElementById("m1Bin").value.trim().replace(/^0+/, "");
     const oct = document.getElementById("m1Oct").value.trim().replace(/^0+/, "");
@@ -186,14 +247,15 @@ function setupMissions() {
     if (bin === "1101" && oct === "31" && hex === "2A") {
       gameState.completed.m1 = true;
       saveState();
+      fb.classList.add("ok");
       fb.textContent = "Cadeado 01 aberto! Frequência de rádio decodificada.";
       document.getElementById("btnNextM1").classList.remove("hidden");
     } else {
+      fb.classList.remove("ok");
       fb.textContent = "Combinação inválida! Revise suas divisões sucessivas por 2, 8 e 16.";
     }
   });
 
-  // Missão 2: API dat-acqu-ino
   document.getElementById("btnCheckM2").addEventListener("click", () => {
     const q1 = document.getElementById("m2Q1").value;
     const q2 = document.getElementById("m2Q2").value;
@@ -203,14 +265,15 @@ function setupMissions() {
     if (q1 === "ok" && q2 === "ok" && q3 === "ok") {
       gameState.completed.m2 = true;
       saveState();
+      fb.classList.add("ok");
       fb.textContent = "Acesso concedido ao servidor dat-acqu-ino!";
       document.getElementById("btnNextM2").classList.remove("hidden");
     } else {
+      fb.classList.remove("ok");
       fb.textContent = "Acesso negado! Verifique o fluxo Arduino -> API -> Front-End -> Usuário.";
     }
   });
 
-  // Missão 3: Portas Básicas (AND: A=1, OR: B=0, NOT: A=0)
   document.getElementById("btnCheckM3").addEventListener("click", () => {
     const vAnd = document.getElementById("m3And").value;
     const vOr = document.getElementById("m3Or").value;
@@ -220,14 +283,15 @@ function setupMissions() {
     if (vAnd === "1" && vOr === "0" && vNot === "0") {
       gameState.completed.m3 = true;
       saveState();
-      fb.textContent = "Lasers desativados! Caminho livre para o cofre.";
+      fb.classList.add("ok");
+      fb.textContent = "Lasers apagados! Caminho livre para o cofre.";
       document.getElementById("btnNextM3").classList.remove("hidden");
     } else {
+      fb.classList.remove("ok");
       fb.textContent = "Os lasers continuam ativos! Confira as tabelas-verdade de AND, OR e NOT.";
     }
   });
 
-  // Missão 4: Portas Derivadas (NAND(1,1)=0, NOR(0,0)=1, XOR(1,1)=0)
   document.getElementById("btnCheckM4").addEventListener("click", () => {
     const vNand = document.getElementById("m4Nand").value;
     const vNor = document.getElementById("m4Nor").value;
@@ -237,9 +301,11 @@ function setupMissions() {
     if (vNand === "0" && vNor === "1" && vXor === "0") {
       gameState.completed.m4 = true;
       saveState();
+      fb.classList.add("ok");
       fb.textContent = "Alarme silencioso neutralizado! Você chegou à jaula da Alice.";
       document.getElementById("btnNextM4").classList.remove("hidden");
     } else {
+      fb.classList.remove("ok");
       fb.textContent = "Sensor disparado! Lembre-se: NAND inverte AND, NOR inverte OR e XOR exige entradas diferentes.";
     }
   });
@@ -251,108 +317,23 @@ function setupMissions() {
 
 // =========================================================
 // MISSÃO 5: CRUZADINHA OFICIAL (12 PALAVRAS CRUZADAS)
-// Grade: 15 linhas (0..14) x 17 colunas (0..16)
 // =========================================================
 const ROWS = 15;
 const COLS = 17;
 
 const WORDS = [
-  {
-    num: 1,
-    dir: "H",
-    word: "MEMORIADEMASSA",
-    row: 1,
-    col: 2,
-    clue: "Armazenamento permanente de grande capacidade para arquivos e programas, mesmo sem energia."
-  },
-  {
-    num: 2,
-    dir: "H",
-    word: "MICROCONTROLADOR",
-    row: 5,
-    col: 0,
-    clue: "Chip único que reúne CPU, memória e periféricos, como o cérebro do Arduino."
-  },
-  {
-    num: 3,
-    dir: "H",
-    word: "ULA",
-    row: 7,
-    col: 3,
-    clue: "Parte da CPU que realiza cálculos matemáticos e operações lógicas com bits."
-  },
-  {
-    num: 4,
-    dir: "H",
-    word: "EEPROM",
-    row: 9,
-    col: 7,
-    clue: "Memória não volátil que permite apagar e regravar dados usando pulsos elétricos."
-  },
-  {
-    num: 5,
-    dir: "H",
-    word: "REGISTRADORES",
-    row: 11,
-    col: 1,
-    clue: "Pequenas memórias ultrarrápidas dentro da CPU que guardam dados em uso imediato."
-  },
-  {
-    num: 6,
-    dir: "H",
-    word: "DATABUS",
-    row: 13,
-    col: 5,
-    clue: "Barramento bidirecional que transporta os dados entre processador, memória e periféricos."
-  },
-  {
-    num: 7,
-    dir: "V",
-    word: "FLASH",
-    row: 0,
-    col: 15,
-    clue: "Memória não volátil muito usada em pendrives, cartões e para gravar código no Arduino."
-  },
-  {
-    num: 8,
-    dir: "V",
-    word: "ADDRESSBUS",
-    row: 1,
-    col: 8,
-    clue: "Barramento unidirecional por onde a CPU informa qual posição de memória quer acessar."
-  },
-  {
-    num: 9,
-    dir: "V",
-    word: "ROM",
-    row: 4,
-    col: 4,
-    clue: "Memória de fábrica apenas para leitura que guarda instruções iniciais do sistema."
-  },
-  {
-    num: 10,
-    dir: "V",
-    word: "DMA",
-    row: 5,
-    col: 5,
-    clue: "Recurso que transfere dados entre periféricos e memória sem ocupar a CPU."
-  },
-  {
-    num: 11,
-    dir: "V",
-    word: "QUADCORE",
-    row: 5,
-    col: 12,
-    clue: "Processador que possui quatro núcleos físicos independentes trabalhando ao mesmo tempo."
-  },
-  {
-    num: 12,
-    dir: "V",
-    word: "UC",
-    row: 13,
-    col: 10,
-    clue: "Componente da CPU que busca, decodifica e coordena a execução das instruções."
-  }
+  { num: 1, dir: "H", word: "MEMORIADEMASSA", row: 1, col: 2, clue: "Armazenamento permanente de grande capacidade para arquivos e programas, mesmo sem energia." },
+  { num: 2, dir: "H", word: "MICROCONTROLADOR", row: 5, col: 0, clue: "Chip único que reúne CPU, memória e periféricos, como o cérebro do Arduino." },
+  { num: 3, dir: "H", word: "ULA", row: 7, col: 3, clue: "Parte da CPU que realiza cálculos matemáticos e operações lógicas com bits." },
+  { num: 4, dir: "H", word: "EEPROM", row: 9, col: 7, clue: "Memória não volátil que permite apagar e regravar dados usando pulsos elétricos." },
+  { num: 5, dir: "H", word: "REGISTRADORES", row: 11, col: 1, clue: "Pequenas memórias ultrarrápidas dentro da CPU que guardam dados em uso imediato." },
+  { num: 6, dir: "H", word: "DATABUS", row: 13, col: 5, clue: "Barramento bidirecional que transporta os dados entre processador, memória e periféricos." },
+  { num: 7, dir: "V", word: "FLASH", row: 0, col: 15, clue: "Memória não volátil muito usada em pendrives, cartões e para gravar código no Arduino." },
+  { num: 8, dir: "V", word: "ADDRESSBUS", row: 1, col: 8, clue: "Barramento unidirecional por onde a CPU informa qual posição de memória quer acessar." },
+  { num: 9, dir: "V", word: "ROM", row: 4, col: 4, clue: "Memória de fábrica apenas para leitura que guarda instruções iniciais do sistema." },
+  { num: 10, dir: "V", word: "DMA", row: 5, col: 5, clue: "Recurso que transfere dados entre periféricos e memória sem ocupar a CPU." },
+  { num: 11, dir: "V", word: "QUADCORE", row: 5, col: 12, clue: "Processador que possui quatro núcleos físicos independentes trabalhando ao mesmo tempo." },
+  { num: 12, dir: "V", word: "UC", row: 13, col: 10, clue: "Componente da CPU que busca, decodifica e coordena a execução das instruções." }
 ];
 
 let cellMap = {};
@@ -482,6 +463,7 @@ function checkCrossword() {
     });
     saveState();
 
+    fb.classList.add("ok");
     fb.textContent = "12 de 12 palavras corretas! A jaula da coelhinha Alice foi destrancada!";
     showModal(
       "ALICE FOI SALVA!",
@@ -489,6 +471,7 @@ function checkCrossword() {
       () => switchScreen("screen-ranking")
     );
   } else {
+    fb.classList.remove("ok");
     fb.textContent = `Você acertou ${solvedCount} de ${WORDS.length} palavras. Ajuste as casas em vermelho e tente novamente!`;
   }
 }
@@ -502,7 +485,9 @@ function resetCrossword() {
     document.getElementById(`clue-${item.num}`).classList.remove("solved");
   });
   document.getElementById("crosswordScore").textContent = `0 de ${WORDS.length} palavras`;
-  document.getElementById("crosswordFeedback").textContent = "Tabuleiro reiniciado.";
+  const fb = document.getElementById("crosswordFeedback");
+  fb.classList.remove("ok");
+  fb.textContent = "Tabuleiro reiniciado.";
 }
 
 // =========================================================
@@ -550,5 +535,6 @@ document.addEventListener("DOMContentLoaded", () => {
   setupMissions();
   buildCrossword();
   updateHud();
+  syncSceneVisuals();
   switchScreen("screen-briefing");
 });
