@@ -174,11 +174,12 @@ function startPhaseTimer(screenId) {
       timerEl.classList.add("danger");
     }
 
-    if (phaseSecondsLeft <= 0) {
+if (phaseSecondsLeft <= 0) {
       clearInterval(timerInterval);
       showModal(
         "TEMPO ESGOTADO!",
         "O alarme disparou e a Laritrix fugiu com a Lola! Clique abaixo para reiniciar o cronômetro desta fase e tentar de novo.",
+        "assets/laritrix-fuga.png",
         () => startPhaseTimer(currentScreen)
       );
     }
@@ -468,6 +469,7 @@ function checkCrossword() {
     showModal(
       "LOLA FOI SALVA!",
       `Parabéns, ${agentLabel}! Você derrotou Laritrix Vilanesca, salvou a coelhinha do Prof. Matheus e registrou o tempo ${finalTimeStr} no Hall dos Agentes!`,
+      "assets/lola-livre.png",
       () => switchScreen("screen-ranking")
     );
   } else {
@@ -510,10 +512,17 @@ function renderRanking() {
   });
 }
 
-function showModal(title, message, onConfirm) {
+function showModal(title, message, imgSrc, onConfirm) {
   const modal = document.getElementById("endModal");
+  const modalImg = document.getElementById("modalImg");
   document.getElementById("modalTitle").textContent = title;
   document.getElementById("modalMessage").textContent = message;
+
+  if (modalImg && imgSrc) {
+    modalImg.style.display = "inline-block";
+    modalImg.src = imgSrc;
+  }
+
   modal.classList.remove("hidden");
 
   const btn = document.getElementById("btnModalAction");
