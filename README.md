@@ -3,7 +3,7 @@
 Jogo estático em estilo 2D Pixel Art inspirado em *Três Espiãs Demais* e *Spy x Family*, desenvolvido para revisão dos conteúdos de Arquitetura Computacional (Sprints 1, 2 e 3).
 
 ## Link do Site Publicado
-- Acesse o jogo: `https://SEU-USUARIO.github.io/arqcomp-cruzadinha/`
+- Acesse o jogo: `https://queiroz-larissa.github.io/arqcomp-cruzadinha/`
 
 ## Como Jogar
 1. **Briefing ASCII:** Informe seu codinome de agente e decodifique a carta de resgate de Laritrix Vilanesca inserindo os códigos decimais da Tabela ASCII para o **Espaço (`32`)** e para a letra **`A` maiúscula (`65`)**.
@@ -26,4 +26,4 @@ Jogo estático em estilo 2D Pixel Art inspirado em *Três Espiãs Demais* e *Spy
 9. **ROM** — Memória de fábrica apenas para leitura que guarda instruções iniciais do sistema.
 10. **DMA** — Recurso que transfere dados entre periféricos e memória sem ocupar a CPU.
 11. **QUADCORE** — Processador que possui quatro núcleos físicos independentes trabalhando ao mesmo tempo.
-12. **UC** — Componente da CPU que busca, decodifica e coordena a execução das instruções.
+12. **UC** — Componente da CPU que busca, decodifica e coordena a execução das instruções.g
